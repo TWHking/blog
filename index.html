@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
+	<title>Docment</title>
 	<style>
 		* {
 			margin: 0;
@@ -155,33 +155,35 @@
 		var imgindex = 1
 		var interval = null
 		function setchange(index) {
+			if (index < selectlist.length-1) {
+				imgindex = index + 1
+			}else{
+				imgindex = 0
+			}
 			for (let idx = 0; idx < selectlist.length; idx++) {
 				selectlist[idx].classList.remove('select')
 			}
 			selectlist[index].classList.add('select')
 			imgli.style.left = -(index * 500) + 'px'
-			if (index < selectlist.length-1) {
-				imgindex += 1
-			}else{
-				imgindex = 0
-			}
 		}
 		for (let index = 0; index < selectlist.length; index++) {
 			selectlist[index].addEventListener('mouseover', function (e) {
+				// console.log('移入:'+index);
 				clearInterval(interval)
 				setchange(index)
 			})
 			selectlist[index].addEventListener('mouseout', function (e) {
+				// console.log('移出:'+index);
 				interval = setInterval(function () {
-					console.log('移出轮播:'+imgindex);
-					setchange(imgindex+1)
-				}, 3000)
+					setchange(imgindex)
+				},3000)
 			})
 		}
 		// 自动轮播
 		interval = setInterval(function () {
+			// console.log('默认轮播:'+imgindex);
 			setchange(imgindex)
-		}, 3000)
+		},3000)
 	</script>
 </body>
 
