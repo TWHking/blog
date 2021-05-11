@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+
+		/* 导航 */
+		.div {
+			margin: 0 auto;
+			margin-top: 100px;
+			background-color: rgb(228, 228, 228);
+			border-radius: 15px;
+			position: relative;
+			height: 30px;
+		}
+
+		.box {
+			height: 30px;
+			background-image: linear-gradient(rgb(27, 183, 255), rgb(0, 111, 202));
+			position: absolute;
+			border-radius: 15px;
+			transition: all 0.3s linear;
+			top: 0;
+			z-index: 0;
+		}
+
+		.menu {
+			display: flex;
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+
+		.menu>div {
+			height: 30px;
+			line-height: 30px;
+			padding: 0 10px;
+			cursor: pointer;
+			font-weight: bold;
+			transition: all 0.1s linear 0.3s;
+		}
+
+		.selectcolor {
+			color: #fff;
+		}
+
+		/* 轮播 */
+		.imagsdiv {
+			margin: 0 auto;
+			margin-top: 100px;
+			width: 500px;
+			height: 380px;
+			overflow-x: hidden;
+			position: relative;
+		}
+
+		.imgli {
+			position: absolute;
+			top: 0;
+			left: 0;
+			display: flex;
+			transition: all 0.3s linear;
+		}
+
+		.imgli>img {
+			width: 500px;
+			height: 380px;
+
+		}
+
+		.selectdiv {
+			position: absolute;
+			width: 100px;
+			left: 200px;
+			bottom: 20px;
+			display: flex;
+			justify-content: space-between;
+		}
+
+		.selectdiv>div {
+			width: 20px;
+			height: 20px;
+			border-radius: 50%;
+			background-color: rgba(44, 44, 44, 0.5);
+			cursor: pointer;
+		}
+
+		.selectdiv>.select {
+			background-color: rgba(255, 255, 255, 0.5);
+			transition: all 0.3s linear;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- 导航 -->
+	<div class="div">
+		<div class="box" style="width:0px;left:0px;"></div>
+		<div class="menu">
+			<div class="selectcolor">JavaScript</div>
+			<div>Chrome</div>
+			<div>Vue</div>
+			<div>node</div>
+			<div>VSCode</div>
+		</div>
+	</div>
+	<!-- 轮播 -->
+	<div class="imagsdiv">
+		<div class="imgli">
+			<img src="https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3483590440,3639765609&fm=26&gp=0.jpg" alt="">
+			<img src="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3071917167,433836694&fm=26&gp=0.jpg" alt="">
+			<img src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1170572153,1678403665&fm=26&gp=0.jpg" alt="">
+		</div>
+		<div class="selectdiv">
+			<div class="select"></div>
+			<div></div>
+			<div></div>
+		</div>
+	</div>
+	<script>
+		// 导航
+		var div = document.querySelector('.div')
+		var box = document.querySelector('.box')
+		var list = document.querySelector('.menu').children
+		var width = 0
+		for (let index = 0; index < list.length; index++) {
+			width += list[index].clientWidth
+			list[index].addEventListener('mouseover', function (e) {
+				let widthall = 0
+				for (let idx = 0; idx < index; idx++) {
+					widthall += list[idx].clientWidth
+				}
+				for (let index = 0; index < list.length; index++) {
+					list[index].classList.remove('selectcolor')
+				}
+				e.currentTarget.classList.add('selectcolor')
+				box.style.width = e.currentTarget.clientWidth + 'px'
+				box.style.left = widthall + 'px'
+			})
+		}
+		box.style.width = list[0].clientWidth + 'px'
+		div.style.width = width + 'px'
+
+		// 轮播
+		var selectlist = document.querySelector('.selectdiv').children
+		var imgli = document.querySelector('.imgli')
+		var imgindex = 1
+		var interval = null
+		function setchange(index) {
+			for (let idx = 0; idx < selectlist.length; idx++) {
+				selectlist[idx].classList.remove('select')
+			}
+			selectlist[index].classList.add('select')
+			imgli.style.left = -(index * 500) + 'px'
+			if (index < selectlist.length-1) {
+				imgindex += 1
+			}else{
+				imgindex = 0
+			}
+		}
+		for (let index = 0; index < selectlist.length; index++) {
+			selectlist[index].addEventListener('mouseover', function (e) {
+				clearInterval(interval)
+				setchange(index)
+			})
+			selectlist[index].addEventListener('mouseout', function (e) {
+				interval = setInterval(function () {
+					console.log('移出轮播:'+imgindex);
+					setchange(imgindex+1)
+				}, 3000)
+			})
+		}
+		// 自动轮播
+		interval = setInterval(function () {
+			setchange(imgindex)
+		}, 3000)
+	</script>
+</body>
+
+</html>
